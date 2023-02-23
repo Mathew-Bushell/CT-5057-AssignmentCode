@@ -23,7 +23,7 @@ def employeecreate():
     address = input("What is the employees address: ")
     while True:
         try:
-            phonenumber = int(input("What is the employees phone number: "))
+            phonenumber = str(input("What is the employees phone number: "))
             break
         except:
             print("Phone number was not inputted correctly, please try again")
@@ -77,8 +77,27 @@ def employeecreate():
     print (joinyear)
 
     designation = input("What is the employees designation: ")
-    grade = input("What is the employees grade: ")
-    loan = input("What is the employees loan: ")
+    grade = str(input("What is the employees grade: "))
+    loan = str(input("What is the employees loan: "))
+
+    File = open("Employees.txt", "r")
+    S1 = File.readlines()
+    File.close()
+    try:
+        for line in S1:
+            last=line
+        last=last.split(",")
+        UID = int(last[0])+1
+        File = open("Employees.txt", "a")
+        File.write("\n"+str(UID)+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan)
+
+
+
+    except:
+        File = open("Employees.txt", "w")
+        line = ("1"+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan)
+        File.write(line)
+
 
 print("Welcome to payroll")
 InputPrompt = True
@@ -89,11 +108,11 @@ while True:
         print("If you want to update an employees record input 'M'")
         print("If you want to delete an employees record input 'D'")
         print("If you want to print an employee pay slip input 'P'")
-        print("If you want to display an employees record input R")
+        print("If you want to display an employees record input 'R'")
         print("To quit input 'Q'")
         InputPrompt = False
 
-    MainInput = input("Please select your option by inputting 'N', 'M', 'P', 'D' or 'Q': ")
+    MainInput = input("Please select your option by inputting 'N', 'M', 'P', 'D', 'R' or 'Q': ")
 
     if MainInput == "Q" or MainInput == "q":
         print("Thank you for using Payroll :)")
@@ -119,6 +138,13 @@ while True:
     elif MainInput == "R" or MainInput == "r":
         InputPrompt = True
         print("Search employee")
+        File = open("Employees.txt", "r")
+        # print(file.readlines())
+        employees=[]
+        for line in File:
+            employees.append(line)
+        File.close()
+        print(employees)
 
     else:
         print("Invalid input please try again")
