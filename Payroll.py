@@ -19,6 +19,26 @@ def linebreaks():
 def employeecreate():
     linebreaks()
 
+    File = open("Employees.txt", "r")
+    UIDComp = File.readlines()
+    File.close()
+    while True:
+        match=False
+        try:
+            UID = int(input("What is the employees registration number:"))
+        except:
+            print("Registration number needs to be a number")
+            continue
+
+        for line in UIDComp:
+           SplitLine = line.split(",")
+           if UID == int(SplitLine[0]):
+               print("Registration Number already in use")
+               match = True
+               break
+        if match == False:
+            break
+
     name = input("What is the employees name: ")
     address = input("What is the employees address: ")
     while True:
@@ -95,8 +115,9 @@ def employeecreate():
 
     except:
         File = open("Employees.txt", "w")
-        line = ("1"+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan)
+        line = (str(UID)+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan)
         File.write(line)
+        File.close()
 
 
 print("Welcome to payroll")
@@ -109,10 +130,11 @@ while True:
         print("If you want to delete an employees record input 'D'")
         print("If you want to print an employee pay slip input 'P'")
         print("If you want to display an employees record input 'R'")
+        print("If you want to display all employees in the system 'L'")
         print("To quit input 'Q'")
         InputPrompt = False
 
-    MainInput = input("Please select your option by inputting 'N', 'M', 'P', 'D', 'R' or 'Q': ")
+    MainInput = input("Please select your option by inputting 'N', 'M', 'P', 'D', 'R', 'L' or 'Q': ")
 
     if MainInput == "Q" or MainInput == "q":
         print("Thank you for using Payroll :)")
