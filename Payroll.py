@@ -1,5 +1,5 @@
 import datetime as date
-
+from tabulate import tabulate
 
 class employee:
     def __init__(self, uid, name, address, phonenumber, joindate, designation, grade, loan):
@@ -119,6 +119,15 @@ def employeecreate():
         File.write(line)
         File.close()
 
+def listemployee():
+    File = open("Employees.txt","r")
+    splitFile = [["Registry", "Name", "Address", "Phone Number", "Join Date", "Role", "Grade", "Salary"]]
+    for line in File:
+        splitLine = line.split(',')
+        splitFile.append(splitLine)
+
+    print(tabulate(splitFile, headers="firstrow"))
+    input("Press enter to continue")
 
 print("Welcome to payroll")
 InputPrompt = True
@@ -156,6 +165,12 @@ while True:
     elif MainInput == "P" or MainInput == "p":
         InputPrompt = True
         print("Print")
+
+    elif MainInput == "L" or MainInput == "l":
+        InputPrompt = True
+        linebreaks()
+        listemployee()
+        linebreaks()
 
     elif MainInput == "R" or MainInput == "r":
         InputPrompt = True
