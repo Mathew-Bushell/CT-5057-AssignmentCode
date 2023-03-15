@@ -97,8 +97,9 @@ def employeecreate():
     print (joinyear)
 
     designation = input("What is the employees designation: ")
-    grade = str(input("What is the employees grade: "))
+    grade = str(input("What is the employees grade(I, II, III, IV): "))
     loan = str(input("What is the employees loan: "))
+    salary = str(input("What is the employees salary(per hour): "))
 
     File = open("Employees.txt", "r")
     S1 = File.readlines()
@@ -109,7 +110,7 @@ def employeecreate():
         last=last.split(",")
         UID = int(last[0])+1
         File = open("Employees.txt", "a")
-        File.write("\n"+str(UID)+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan)
+        File.write("\n"+str(UID)+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan+","+salary)
 
 
 
@@ -121,7 +122,7 @@ def employeecreate():
 
 def listemployee():
     File = open("Employees.txt","r")
-    splitFile = [["Registry", "Name", "Address", "Phone Number", "Join Date", "Role", "Grade", "Salary"]]
+    splitFile = [["Registry", "Name", "Address", "Phone Number", "Join Date", "Role", "Grade", "Loan"]]
     for line in File:
         splitLine = line.split(',')
         splitFile.append(splitLine)

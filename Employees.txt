@@ -1,6 +1,6 @@
-1,Jim Tiberius,34 Daleway Street,075330543,16/3/1922,Manager,3,300
-2,Bob Bobington,23 Bob Road,075435643,3/6/1999,Manager,2,250
-3,Mathew Bushell,10 Galeway,073864345,16/8/2020,Customer Assistant,1,10
-4,John,23 High Street,0733476445,29/11/1938,CEO,1,2000
-5,Jenny Cunningham,182 Anchor Way Road,0723353443,30/4/2001,Manager,3,300
-6,Maurice Brown,22 Hope Street,072342232,31/3/1964,Customer Service Assistant,2,10
+1,Jim Tiberius,34 Daleway Street,075330543,16/3/1922,Manager,III,300,20
+2,Bob Bobington,23 Bob Road,075435643,3/6/1999,Manager,II,250,15
+3,Mathew Bushell,10 Galeway,073864345,16/8/2020,Customer Assistant,I,100,10
+4,John,23 High Street,0733476445,29/11/1938,CEO,I,2000,50
+5,Jenny Cunningham,182 Anchor Way Road,0723353443,30/4/2001,Manager,III,300,20
+6,Maurice Brown,22 Hope Street,072342232,31/3/1964,Customer Service Assistant,I,100,10
