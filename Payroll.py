@@ -27,6 +27,7 @@ class Tree:
             self.right.PrintTree()
     def insert(self,data):
         #compares the new value with the parent node and decides where it goes
+        #because its designed to accept an split line in the form of a list the data compares have to compare from the UID value aka pos 0
         if self.data:
             if data[0] < self.data[0]:
                 if self.left is None:
