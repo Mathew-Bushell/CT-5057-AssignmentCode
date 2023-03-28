@@ -1,7 +1,7 @@
 import datetime as date
 from tabulate import tabulate
 
-class employee:
+class Employee:
     def __init__(self, uid, name, address, phonenumber, joindate, designation, grade, loan):
         self.uid = uid
         self.name = name
@@ -11,6 +11,36 @@ class employee:
         self.designation = designation
         self.grade = grade
         self.loan = loan
+
+#used for guidance https://www.tutorialspoint.com/python_data_structure/python_binary_tree.htm
+class Tree:
+    def __init__(self,data):
+        self.left = None
+        self.right = None
+        self.data = data
+    def PrintTree(self):
+        #prints the data from left to right, used for testing
+        if self.left:
+            self.left.PrintTree()
+        print(self.data),
+        if self.right:
+            self.right.PrintTree()
+    def insert(self,data):
+        #compares the new value with the parent node and decides where it goes
+        if self.data:
+            if data[0] < self.data[0]:
+                if self.left is None:
+                    self.left = Tree(data)
+                else:
+                    self.left.insert(data)
+            elif data[0] > self.data[0]:
+                if self.right is None:
+                    self.right = Tree(data)
+                else:
+                    self.right.insert(data)
+            else:
+                self.data = data
+#note while maurice had an ID of 6 she was placed "last" in the tree.
 
 def linebreaks():
     for x in range(20):
@@ -121,6 +151,7 @@ def employeecreate():
         File.close()
 
 def listemployee():
+    # fills the splitline queue with employee data, prints it using tabulate and then empties the queue
     File = open("Employees.txt","r")
     splitFile = [["Registry", "Name", "Address", "Phone Number", "Join Date", "Role", "Grade", "Loan"]]
     for line in File:
@@ -128,8 +159,26 @@ def listemployee():
         splitFile.append(splitLine)
 
     print(tabulate(splitFile, headers="firstrow"))
+
+    for x in splitFile:
+        splitFile.pop(0)
+    print(splitFile)
     input("Press enter to continue")
 
+def treebuild():
+    #builds a tree out of the data
+    File = open("Employees.txt", "r")
+    for line in File:
+        try:
+            splitLine = line.split(',')
+            employees.insert(splitLine)
+        except:
+            splitLine = line.split(',')
+            employees = Tree(splitLine)
+    employees.PrintTree()
+
+
+#Program Start
 print("Welcome to payroll")
 InputPrompt = True
 
@@ -148,6 +197,7 @@ while True:
 
     if MainInput == "Q" or MainInput == "q":
         print("Thank you for using Payroll :)")
+
         break
     elif MainInput == "N" or MainInput == "n":
         InputPrompt = True
@@ -166,6 +216,7 @@ while True:
     elif MainInput == "P" or MainInput == "p":
         InputPrompt = True
         print("Print")
+        treebuild()
 
     elif MainInput == "L" or MainInput == "l":
         InputPrompt = True
