@@ -176,7 +176,7 @@ def treebuild():
         except:
             splitLine = line.split(',')
             employees = Tree(splitLine)
-    employees.PrintTree()
+    return(employees)
 
 
 #Program Start
@@ -217,7 +217,8 @@ while True:
     elif MainInput == "P" or MainInput == "p":
         InputPrompt = True
         print("Print")
-        treebuild()
+        employees = treebuild()
+        employees.PrintTree()
 
     elif MainInput == "L" or MainInput == "l":
         InputPrompt = True
