@@ -1,6 +1,6 @@
 import datetime as date
 from tabulate import tabulate
-
+from time import sleep
 class Employee:
     def __init__(self, uid, name, address, phonenumber, joindate, designation, grade, loan):
         self.uid = uid
@@ -41,6 +41,19 @@ class Tree:
                     self.right.insert(data)
             else:
                 self.data = data
+    #Binary searches the tree for the targeted value
+    def binarySearch(self, target):
+        if target < int(self.data[0]):
+            if self.left is None:
+                return str("There is no employee with the ID "+str(target))
+            return self.left.binarySearch(target)
+        elif target > int(self.data[0]):
+            if self.right is None:
+                return str("There is no employee with the ID "+str(target))
+            return self.right.binarySearch(target)
+        else:
+            return str(self.data)
+
 #note while maurice had an ID of 6 she was placed "last" in the tree.
 
 def linebreaks():
@@ -131,6 +144,8 @@ def employeecreate():
     grade = str(input("What is the employees grade(I, II, III, IV): "))
     loan = str(input("What is the employees loan: "))
     salary = str(input("What is the employees salary(per hour): "))
+    hours = str(input("What is the employees standard work hours: "))
+    travel = str(input("What is the employees travel allowance: "))
 
     File = open("Employees.txt", "r")
     S1 = File.readlines()
@@ -141,20 +156,20 @@ def employeecreate():
         last=last.split(",")
         UID = int(last[0])+1
         File = open("Employees.txt", "a")
-        File.write("\n"+str(UID)+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan+","+salary)
+        File.write("\n"+str(UID)+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan+","+salary+","+hours+","+travel)
 
 
 
     except:
         File = open("Employees.txt", "w")
-        line = (str(UID)+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan)
+        line = (str(UID)+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan+","+salary+","+hours+","+travel)
         File.write(line)
         File.close()
 
 def listemployee():
     # fills the splitline queue with employee data, prints it using tabulate and then empties the queue
     File = open("Employees.txt","r")
-    splitFile = [["Registry", "Name", "Address", "Phone Number", "Join Date", "Role", "Grade", "Loan"]]
+    splitFile = [["Registry", "Name", "Address", "Phone Number", "Join Date", "Role", "Grade", "Loan", "Standard hours", "Travel Allowance"]]
     for line in File:
         splitLine = line.split(',')
         splitFile.append(splitLine)
@@ -163,7 +178,7 @@ def listemployee():
 
     for x in splitFile:
         splitFile.pop(0)
-    print(splitFile)
+    # print(splitFile)
     input("Press enter to continue")
 
 def treebuild():
@@ -177,6 +192,10 @@ def treebuild():
             splitLine = line.split(',')
             employees = Tree(splitLine)
     return(employees)
+
+def percentage(total, percent):
+    #calcultes the percetnage of a total with a provided percent
+    return (int(total) / 100) * percent
 
 
 #Program Start
@@ -198,7 +217,7 @@ while True:
 
     if MainInput == "Q" or MainInput == "q":
         print("Thank you for using Payroll :)")
-
+        sleep(3)
         break
     elif MainInput == "N" or MainInput == "n":
         InputPrompt = True
@@ -216,9 +235,21 @@ while True:
 
     elif MainInput == "P" or MainInput == "p":
         InputPrompt = True
-        print("Print")
+        linebreaks()
         employees = treebuild()
-        employees.PrintTree()
+        target = int(input("Enter the ID of the employee you wish to print the pay slip of: "))
+        employeeDetails = employees.binarySearch(target)
+        try:
+            head = [["Registry", "Name", "Salary", "Travel Allowance", "House allowance", "Health allowance", "Deductions"]]
+            # employeeDetails = employeeDetails.replace("\n","")
+            employeeDetails = employeeDetails.replace("[", "")
+            employeeDetails = employeeDetails.replace("]", "")
+            employeeDetails = employeeDetails.split(",")
+            print(employeeDetails)
+
+        except:
+            print(employeeDetails)
+
 
     elif MainInput == "L" or MainInput == "l":
         InputPrompt = True
