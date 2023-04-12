@@ -1,4 +1,4 @@
-import datetime as date
+from datetime import datetime
 from tabulate import tabulate
 from time import sleep
 class Employee:
@@ -60,6 +60,56 @@ def linebreaks():
     for x in range(20):
         print("")
 
+def getADate(textPrompt):
+    maxyear = datetime.now().year
+
+    while True:
+        print(textPrompt)
+        daycheck = False
+        monthcheck = False
+        yearcheck = False
+        try:
+
+            while yearcheck == False:
+                year = int(input("Year: "))
+                if year >= 1900 and year <= maxyear:
+                    yearcheck = True
+                    year = str(year)
+                else:
+                    print("Unacceptable Year")
+
+            while monthcheck == False:
+                month = int(input("Month: "))
+                if month >= 1 and month <= 12:
+                    monthcheck = True
+                    month = str(month)
+                else:
+                    print("Unacceptable Month")
+
+            if month == "1" or month == "3" or month == "5" or month == "7" or month == "8" or month == "10" or month == "12":
+                maxday = 31
+            elif month == "4" or month == "6" or month == "9" or month == "11":
+                maxday = 30
+            elif month == "2":
+                maxday = 28
+            else:
+                print("Invalid month inputted!!!")
+
+            while daycheck == False:
+                day = int(input("Day: "))
+                if day >= 1 and day <= maxday:
+                    daycheck = True
+                    day = str(day)
+                else:
+                    print("Unacceptable Day")
+
+            break
+        except:
+            print("This field only accepts integers")
+
+    joinyear = (day + "/" + month + "/" + year)
+    return(joinyear)
+
 def employeecreate():
     linebreaks()
 
@@ -91,55 +141,8 @@ def employeecreate():
             break
         except:
             print("Phone number was not inputted correctly, please try again")
-    maxyear =  date.datetime.now().year
 
-    while True:
-        print("When did the employee join(DD/MM/YYYY)")
-        daycheck = False
-        monthcheck = False
-        yearcheck = False
-        try:
-
-            while yearcheck == False:
-                year = int(input("Year: "))
-                if year >= 1900 and year <= maxyear:
-                    yearcheck = True
-                    year = str(year)
-                else:
-                    print("Unacceptable Year")
-
-            while monthcheck == False:
-                month = int(input("Month: "))
-                if month >= 1 and month <= 12:
-                    monthcheck = True
-                    month = str(month)
-                else:
-                    print("Unacceptable Month")
-
-            if month == "1" or month == "3" or month == "5" or month == "7" or month == "8" or month == "10" or month == "12":
-                maxday = 31
-            elif month == "4" or month == "6"  or month == "9" or month == "11":
-                maxday = 30
-            elif month == "2":
-                maxday = 28
-            else:
-                print("Invalid month inputted!!!")
-
-            while daycheck == False:
-                day = int(input("Day: "))
-                if day >= 1 and day <= maxday:
-                    daycheck = True
-                    day = str(day)
-                else:
-                    print("Unacceptable Day")
-
-            break
-        except:
-            print("This field only accepts integers")
-
-    joinyear = (day+"/"+month+"/"+year)
-    print (joinyear)
-
+    joinyear = getADate("When did the employee join(DD/MM/YYYY)")
     designation = input("What is the employees designation: ")
     grade = str(input("What is the employees grade(I, II, III, IV): "))
     loan = str(input("What is the employees loan: "))
@@ -150,11 +153,8 @@ def employeecreate():
     File = open("Employees.txt", "r")
     S1 = File.readlines()
     File.close()
+
     try:
-        for line in S1:
-            last=line
-        last=last.split(",")
-        UID = int(last[0])+1
         File = open("Employees.txt", "a")
         File.write("\n"+str(UID)+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan+","+salary+","+hours+","+travel)
 
@@ -166,10 +166,13 @@ def employeecreate():
         File.write(line)
         File.close()
 
+def waitForUserInput():
+    input("Press enter to continue...")
+
 def listemployee():
     # fills the splitline queue with employee data, prints it using tabulate and then empties the queue
     File = open("Employees.txt","r")
-    splitFile = [["Registry", "Name", "Address", "Phone Number", "Join Date", "Role", "Grade", "Loan", "Standard hours", "Travel Allowance"]]
+    splitFile = [["Registry", "Name", "Address", "Phone Number", "Join Date", "Role", "Grade", "Loan", "Hourly Pay", "Standard hours", "Travel Allowance"]]
     for line in File:
         splitLine = line.split(',')
         splitFile.append(splitLine)
@@ -179,7 +182,7 @@ def listemployee():
     for x in splitFile:
         splitFile.pop(0)
     # print(splitFile)
-    input("Press enter to continue")
+    waitForUserInput()
 
 def treebuild():
     #builds a tree out of the data
@@ -238,15 +241,43 @@ while True:
         linebreaks()
         employees = treebuild()
         target = int(input("Enter the ID of the employee you wish to print the pay slip of: "))
+        slipDate = getADate("What is the date for the payslip(DD/MM/YYYY)")
+        while True:
+            try:
+                overtime = int(input("How many hour of overtime has the employee worked: "))
+                break
+            except:
+                print("Invalid Input")
         employeeDetails = employees.binarySearch(target)
+
         try:
-            head = [["Registry", "Name", "Salary", "Travel Allowance", "House allowance", "Health allowance", "Deductions"]]
-            # employeeDetails = employeeDetails.replace("\n","")
+            head = [["Registry", "Name", "Travel Allowance", "House allowance", "Health allowance", "Deductions", "Net Salary"]]
+            tail = []
+            print("Pay slip for " + slipDate)
             employeeDetails = employeeDetails.replace("[", "")
             employeeDetails = employeeDetails.replace("]", "")
+            employeeDetails = employeeDetails.replace("'", "")
             employeeDetails = employeeDetails.split(",")
-            print(employeeDetails)
-
+            # employeeDetails[10] = employeeDetails[10].replace("\n", "")
+            # print(employeeDetails)
+            tail.append(employeeDetails[0])
+            tail.append(employeeDetails[1])
+            if overtime > 0:
+                salary = (int(employeeDetails[8]) * (int(employeeDetails[9]) + overtime))
+            else:
+                salary = (int(employeeDetails[8]) * int(employeeDetails[9]))
+            # tail.append(salary)
+            tail.append((employeeDetails[10])[:-2])
+            tail.append(percentage(salary, 5))
+            tail.append(percentage(salary, 8))
+            deductions = percentage(salary, 20)
+            tail.append(deductions)
+            netSalary = salary - deductions
+            tail.append(netSalary)
+            head.append(tail)
+            print(tabulate(head, headers="firstrow"))
+            waitForUserInput()
+            linebreaks()
         except:
             print(employeeDetails)
 
@@ -260,13 +291,26 @@ while True:
     elif MainInput == "R" or MainInput == "r":
         InputPrompt = True
         print("Search employee")
-        File = open("Employees.txt", "r")
-        # print(file.readlines())
-        employees=[]
-        for line in File:
-            employees.append(line)
-        File.close()
-        print(employees)
+        linebreaks()
+        employees = treebuild()
+        target = int(input("Enter the ID of the employee view: "))
+        employeeDetails = employees.binarySearch(target)
+
+        try:
+            head = [["Registry", "Name", "Address", "Phone Number", "Join Date", "Role", "Grade", "Loan", "Hourly Pay", "Standard hours", "Travel Allowance"]]
+            tail = []
+            employeeDetails = employeeDetails.replace("[", "")
+            employeeDetails = employeeDetails.replace("]", "")
+            employeeDetails = employeeDetails.replace("'", "")
+            employeeDetails = employeeDetails.split(",")
+            employeeDetails[10] = (employeeDetails[10])[:-2]
+
+            head.append(employeeDetails)
+            print(tabulate(head, headers="firstrow"))
+            waitForUserInput()
+            linebreaks()
+        except:
+            print(employeeDetails)
 
     else:
         print("Invalid input please try again")
