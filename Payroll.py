@@ -144,7 +144,12 @@ def employeecreate():
 
     joinyear = getADate("When did the employee join(DD/MM/YYYY)")
     designation = input("What is the employees designation: ")
-    grade = str(input("What is the employees grade(I, II, III, IV): "))
+    while True:
+        grade = str(input("What is the employees grade(I, II, III, IV): "))
+        if grade == "I" or grade == "II" or grade == "III" or grade == "IV":
+            break
+        else:
+            print("Invalid Input")
     loan = str(input("What is the employees loan: "))
     salary = str(input("What is the employees salary(per hour): "))
     hours = str(input("What is the employees standard work hours: "))
@@ -237,13 +242,12 @@ def mergesort(array):
             j += 1
             k += 1
 
-
 def interpolation_search(fullArray, target):
     #sets up array positions
     array = []
     for x in fullArray:
         array.append(int(x[0]))
-    print(array)
+    # print(array)
     n = len(array)
     low = 0
     high = n - 1
@@ -293,10 +297,92 @@ while True:
         InputPrompt = True
 
     elif MainInput == "M" or MainInput == "m":
+        linebreaks()
         InputPrompt = True
-        print("update employee")
+        employeeArray = []
+        file = open("Employees.txt", "r")
+        employees = file.readlines()
+        file.close()
+        for line in employees:
+            editedLine = line.replace("\n", "")
+            editedLine = editedLine.split(",")
+            employeeArray.append(editedLine)
+        # print(employeeArray)
+        mergesort(employeeArray)
+        # print(employeeArray)
+        while True:
+            try:
+                target = int(input("Enter the Employee ID of the employee you would like to modify: "))
+                targetPos = interpolation_search(employeeArray, target)
+                if targetPos != -1:
+                    break
+                else:
+                    print("No user has been found with this Employee ID")
+            except:
+                print("Invalid Input, Employee IDs can only be numbers!")
+        changeOptions = {"Employee Registration Number": 0, "Name": 1, "Address": 2, "Phone Number": 3, "Join Date": 4, "Designation": 5, "Grade": 6, "Loan": 7, "Salary Per Hour": 8, "Hours": 9, "Travel Allowance": 10, "House Allowance": 11, "Health Allowance": 12}
+        while True:
+            match = False
+            changeTarget = input("What value would you like to modify:\nEmployee Registration Number\nName\nAddress\nPhone Nubmer\nJoin Date\nDesignation\nGrade\nLoan\nSalary Per Hour\nTravel Allowance\nHouse Allowance\nHealth Allowance\n")
+            for x in changeOptions:
+                if changeTarget == x:
+                    match = True
+            if match == True:
+                break
+            else:
+                print("Invalid Input!")
+        if changeOptions[changeTarget] == 0 or changeOptions[changeTarget] == 3 or changeOptions[changeTarget] == 7 or changeOptions[changeTarget] == 8 or changeOptions[changeTarget] == 9 or changeOptions[changeTarget] == 10 or changeOptions[changeTarget] == 11 or changeOptions[changeTarget] == 12:
+            while True:
+                try:
+                    change = int(input("What would you like to change " + changeTarget + " to?(Ints only):"))
+                    change = str(change)
+                    break
+                except:
+                    print("Invalid Input!")
+        elif changeOptions[changeTarget] == 6:
+            while True:
+                try:
+                    change = str(input("What would you like to change " + changeTarget + " to?(I, II, III, IV):"))
+                    if change == "I" or change == "II" or change == "III" or change == "IV":
+                        break
+                    else:
+                        print("Invalid Input")
+                except:
+                    print("Invalid Input!")
+        elif changeOptions[changeTarget] == 4:
+            change = getADate("What would you like to change the Join Date to?")
+        else:
+            while True:
+                try:
+                    change = str(input("What would you like to change " + changeTarget + " to?(Strings Only):"))
+                    break
+                except:
+                    print("Invalid Input!")
+
+        modifiedList = employeeArray[targetPos]
+        modifiedList[changeOptions[changeTarget]] = change
+        employeeArray[targetPos] = modifiedList
+        # print(employeeArray)
+        File = open("Employees.txt", "w")
+        newFile = str()
+        for line in employeeArray:
+            if len(newFile) == 0:
+                newFile = newFile + line[0] + "," + line[1] + "," + line[2] + "," + line[3] + "," + line[4] + "," + \
+                          line[5] + "," + line[6] + "," + line[7] + "," + line[8] + "," + line[9] + "," + line[
+                              10] + "," + line[11] + "," + line[12]
+            else:
+                newFile = newFile + "\n" + line[0] + "," + line[1] + "," + line[2] + "," + line[3] + "," + line[
+                    4] + "," + line[5] + "," + line[6] + "," + line[7] + "," + line[8] + "," + line[9] + "," + line[
+                              10] + "," + line[11] + "," + line[12]
+        # print(newFile)
+        File.write(newFile)
+        File.close()
+        print("File Modified")
+        waitForUserInput()
+        linebreaks()
 
     elif MainInput == "D" or MainInput == "d":
+        linebreaks()
         InputPrompt = True
         employeeArray = []
         file = open("Employees.txt", "r")
@@ -335,11 +421,12 @@ while True:
             File.write(newFile)
             File.close()
             print("File Deleted")
-            waitForUserInput()
         elif confirmation == "N" or confirmation == "n":
             print("Deletion Aborted")
         else:
             print("Invalid Input!")
+        waitForUserInput()
+        linebreaks()
 
     elif MainInput == "P" or MainInput == "p":
         InputPrompt = True
@@ -385,7 +472,6 @@ while True:
             linebreaks()
         except:
             print(employeeDetails)
-
 
     elif MainInput == "L" or MainInput == "l":
         InputPrompt = True
