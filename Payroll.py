@@ -156,13 +156,13 @@ def employeecreate():
 
     try:
         File = open("Employees.txt", "a")
-        File.write("\n"+str(UID)+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan+","+salary+","+hours+","+travel)
+        File.write("\n"+str(UID)+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan+","+salary+","+hours+","+travel+",5,8")
 
 
 
     except:
         File = open("Employees.txt", "w")
-        line = (str(UID)+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan+","+salary+","+hours+","+travel)
+        line = (str(UID)+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan+","+salary+","+hours+","+travel+",5,8")
         File.write(line)
         File.close()
 
@@ -172,7 +172,7 @@ def waitForUserInput():
 def listemployee():
     # fills the splitline queue with employee data, prints it using tabulate and then empties the queue
     File = open("Employees.txt","r")
-    splitFile = [["Registry", "Name", "Address", "Phone Number", "Join Date", "Role", "Grade", "Loan", "Hourly Pay", "Standard hours", "Travel Allowance"]]
+    splitFile = [["Registry", "Name", "Address", "Phone Number", "Join Date", "Role", "Grade", "Loan", "Hourly Pay", "Standard hours", "Travel Allowance", "House Allowance %", "Health Allowance %"]]
     for line in File:
         splitLine = line.split(',')
         splitFile.append(splitLine)
@@ -200,6 +200,69 @@ def percentage(total, percent):
     #calcultes the percetnage of a total with a provided percent
     return (int(total) / 100) * percent
 
+def mergesort(array):
+    if len(array) > 1:
+        # finds the middle of the array
+        mid = len(array) // 2
+
+        #divides array elements into left and right
+        L = array[:mid]
+        R = array[mid:]
+
+        #seperate halves are sorted
+        mergesort(L)
+        mergesort(R)
+
+        i = j = k = 0
+
+        # Copy data to temp arrays L[] and R[]
+        #once the array is split it is sorted
+        while i < len(L) and j < len(R):
+            if L[i] <= R[j]:
+                array[k] = L[i]
+                i += 1
+            else:
+                array[k] = R[j]
+                j += 1
+            k += 1
+
+        # Checking if any element was left
+        while i < len(L):
+            array[k] = L[i]
+            i += 1
+            k += 1
+
+        while j < len(R):
+            array[k] = R[j]
+            j += 1
+            k += 1
+
+
+def interpolation_search(fullArray, target):
+    #sets up array positions
+    array = []
+    for x in fullArray:
+        array.append(int(x[0]))
+    print(array)
+    n = len(array)
+    low = 0
+    high = n - 1
+
+    while low <= high and target >= array[low] and target <= array[high]:
+        # Estimate the position of the target value using linear interpolation
+        pos = low + int(((target - array[low]) / (array[high] - array[low])) * (high - low))
+
+        if target == array[pos]:
+            return pos
+
+        #if the target is higher than the pointer positon it will move the lower position up
+        if array[pos] < target:
+            low = pos + 1
+        # if the target is lower than the pointer positon it will move the higher position down
+        else:
+            high = pos - 1
+
+    return -1  # Target value not found in the array
 
 #Program Start
 print("Welcome to payroll")
@@ -222,6 +285,7 @@ while True:
         print("Thank you for using Payroll :)")
         sleep(3)
         break
+
     elif MainInput == "N" or MainInput == "n":
         InputPrompt = True
         employeecreate()
@@ -234,7 +298,48 @@ while True:
 
     elif MainInput == "D" or MainInput == "d":
         InputPrompt = True
-        print("delete employee")
+        employeeArray = []
+        file = open("Employees.txt", "r")
+        employees = file.readlines()
+        file.close()
+        for line in employees:
+            editedLine = line.replace("\n", "")
+            editedLine = editedLine.split(",")
+            employeeArray.append(editedLine)
+        # print(employeeArray)
+        mergesort(employeeArray)
+        # print(employeeArray)
+
+        while True:
+            try:
+                target = int(input("Enter the Employee ID: "))
+                targetPos = interpolation_search(employeeArray, target)
+                if targetPos != -1:
+                    break
+                else:
+                    print("No user has been found with this Employee ID")
+            except:
+                print("Invalid Input, Employee IDs can only be numbers!")
+
+        confirmation = input("Are you sure you want to delete this employee(Y/N)? ")
+        if confirmation == "Y" or confirmation =="y":
+            File = open("Employees.txt", "w")
+            employeeArray.pop(targetPos)
+            newFile = str()
+            for line in employeeArray:
+                if len(newFile) == 0:
+                    newFile = newFile + line[0] + "," + line[1] + "," + line[2] + "," + line[3] + "," + line[4] + "," + line[5] + "," + line[6] + "," + line[7] + "," + line[8] + "," + line[9] + "," + line[10] + "," + line[11] + "," + line[12]
+                else:
+                    newFile = newFile + "\n" + line[0] + "," + line[1] + "," + line[2] + "," + line[3] + "," + line[4] + "," + line[5] + "," + line[6] + "," + line[7] + "," + line[8] + "," + line[9] + "," + line[10] + "," + line[11] + "," + line[12]
+            # print(newFile)
+            File.write(newFile)
+            File.close()
+            print("File Deleted")
+            waitForUserInput()
+        elif confirmation == "N" or confirmation == "n":
+            print("Deletion Aborted")
+        else:
+            print("Invalid Input!")
 
     elif MainInput == "P" or MainInput == "p":
         InputPrompt = True
@@ -268,8 +373,8 @@ while True:
                 salary = (int(employeeDetails[8]) * int(employeeDetails[9]))
             # tail.append(salary)
             tail.append((employeeDetails[10])[:-2])
-            tail.append(percentage(salary, 5))
-            tail.append(percentage(salary, 8))
+            tail.append(percentage(salary, int(employeeDetails[11])))
+            tail.append(percentage(salary, int(employeeDetails[12].replace("\\n", ""))))
             deductions = percentage(salary, 20)
             tail.append(deductions)
             netSalary = salary - deductions
@@ -297,13 +402,13 @@ while True:
         employeeDetails = employees.binarySearch(target)
 
         try:
-            head = [["Registry", "Name", "Address", "Phone Number", "Join Date", "Role", "Grade", "Loan", "Hourly Pay", "Standard hours", "Travel Allowance"]]
+            head = [["Registry", "Name", "Address", "Phone Number", "Join Date", "Role", "Grade", "Loan", "Hourly Pay", "Standard hours", "Travel Allowance", "House Allowance %", "Health Allowance %"]]
             tail = []
             employeeDetails = employeeDetails.replace("[", "")
             employeeDetails = employeeDetails.replace("]", "")
             employeeDetails = employeeDetails.replace("'", "")
             employeeDetails = employeeDetails.split(",")
-            employeeDetails[10] = (employeeDetails[10])[:-2]
+            employeeDetails[12] = (employeeDetails[12])[:-2]
 
             head.append(employeeDetails)
             print(tabulate(head, headers="firstrow"))
