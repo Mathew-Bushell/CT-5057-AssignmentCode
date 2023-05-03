@@ -1,16 +1,6 @@
 from datetime import datetime
 from tabulate import tabulate
 from time import sleep
-class Employee:
-    def __init__(self, uid, name, address, phonenumber, joindate, designation, grade, loan):
-        self.uid = uid
-        self.name = name
-        self.address = address
-        self.phonenumber = phonenumber
-        self.joindate = joindate
-        self.designation = designation
-        self.grade = grade
-        self.loan = loan
 
 #used for guidance https://www.tutorialspoint.com/python_data_structure/python_binary_tree.htm
 class Tree:
@@ -268,241 +258,265 @@ def interpolation_search(fullArray, target):
 
     return -1  # Target value not found in the array
 
-#Program Start
-print("Welcome to payroll")
-InputPrompt = True
 
-while True:
-    if InputPrompt == True:
-        print("If you want to add a new employee input 'N'")
-        print("If you want to update an employees record input 'M'")
-        print("If you want to delete an employees record input 'D'")
-        print("If you want to print an employee pay slip input 'P'")
-        print("If you want to display an employees record input 'R'")
-        print("If you want to display all employees in the system 'L'")
-        print("To quit input 'Q'")
-        InputPrompt = False
+def mainMenu():
+    InputPrompt = True
+    while True:
+        if InputPrompt == True:
+            print("If you want to add a new employee input 'N'")
+            print("If you want to update an employees record input 'M'")
+            print("If you want to delete an employees record input 'D'")
+            print("If you want to print an employee pay slip input 'P'")
+            print("If you want to display an employees record input 'R'")
+            print("If you want to display all employees in the system 'L'")
+            print("To quit input 'Q'")
+            InputPrompt = False
 
-    MainInput = input("Please select your option by inputting 'N', 'M', 'P', 'D', 'R', 'L' or 'Q': ")
+        MainInput = input("Please select your option by inputting 'N', 'M', 'P', 'D', 'R', 'L' or 'Q': ")
 
-    if MainInput == "Q" or MainInput == "q":
-        print("Thank you for using Payroll :)")
-        sleep(3)
-        break
+        if MainInput == "Q" or MainInput == "q":
+            print("Thank you for using Payroll :)")
+            sleep(3)
+            break
 
-    elif MainInput == "N" or MainInput == "n":
-        InputPrompt = True
-        employeecreate()
-        linebreaks()
-        InputPrompt = True
+        elif MainInput == "N" or MainInput == "n":
+            InputPrompt = True
+            employeecreate()
+            linebreaks()
+            InputPrompt = True
 
-    elif MainInput == "M" or MainInput == "m":
-        linebreaks()
-        InputPrompt = True
-        employeeArray = []
-        file = open("Employees.txt", "r")
-        employees = file.readlines()
-        file.close()
-        for line in employees:
-            editedLine = line.replace("\n", "")
-            editedLine = editedLine.split(",")
-            employeeArray.append(editedLine)
-        # print(employeeArray)
-        mergesort(employeeArray)
-        # print(employeeArray)
-        while True:
-            try:
-                target = int(input("Enter the Employee ID of the employee you would like to modify: "))
-                targetPos = interpolation_search(employeeArray, target)
-                if targetPos != -1:
-                    break
-                else:
-                    print("No user has been found with this Employee ID")
-            except:
-                print("Invalid Input, Employee IDs can only be numbers!")
-        changeOptions = {"Employee Registration Number": 0, "Name": 1, "Address": 2, "Phone Number": 3, "Join Date": 4, "Designation": 5, "Grade": 6, "Loan": 7, "Salary Per Hour": 8, "Hours": 9, "Travel Allowance": 10, "House Allowance": 11, "Health Allowance": 12}
-        while True:
-            match = False
-            changeTarget = input("What value would you like to modify:\nEmployee Registration Number\nName\nAddress\nPhone Nubmer\nJoin Date\nDesignation\nGrade\nLoan\nSalary Per Hour\nTravel Allowance\nHouse Allowance\nHealth Allowance\n")
-            for x in changeOptions:
-                if changeTarget == x:
-                    match = True
-            if match == True:
-                break
-            else:
-                print("Invalid Input!")
-        if changeOptions[changeTarget] == 0 or changeOptions[changeTarget] == 3 or changeOptions[changeTarget] == 7 or changeOptions[changeTarget] == 8 or changeOptions[changeTarget] == 9 or changeOptions[changeTarget] == 10 or changeOptions[changeTarget] == 11 or changeOptions[changeTarget] == 12:
+        elif MainInput == "M" or MainInput == "m":
+            linebreaks()
+            InputPrompt = True
+            employeeArray = []
+            file = open("Employees.txt", "r")
+            employees = file.readlines()
+            file.close()
+            for line in employees:
+                editedLine = line.replace("\n", "")
+                editedLine = editedLine.split(",")
+                employeeArray.append(editedLine)
+            # print(employeeArray)
+            mergesort(employeeArray)
+            # print(employeeArray)
             while True:
                 try:
-                    change = int(input("What would you like to change " + changeTarget + " to?(Ints only):"))
-                    change = str(change)
-                    break
-                except:
-                    print("Invalid Input!")
-        elif changeOptions[changeTarget] == 6:
-            while True:
-                try:
-                    change = str(input("What would you like to change " + changeTarget + " to?(I, II, III, IV):"))
-                    if change == "I" or change == "II" or change == "III" or change == "IV":
+                    target = int(input("Enter the Employee ID of the employee you would like to modify: "))
+                    targetPos = interpolation_search(employeeArray, target)
+                    if targetPos != -1:
                         break
                     else:
-                        print("Invalid Input")
+                        print("No user has been found with this Employee ID")
                 except:
-                    print("Invalid Input!")
-        elif changeOptions[changeTarget] == 4:
-            change = getADate("What would you like to change the Join Date to?")
-        else:
+                    print("Invalid Input, Employee IDs can only be numbers!")
+            changeOptions = {"Employee Registration Number": 0, "Name": 1, "Address": 2, "Phone Number": 3,
+                             "Join Date": 4, "Designation": 5, "Grade": 6, "Loan": 7, "Salary Per Hour": 8, "Hours": 9,
+                             "Travel Allowance": 10, "House Allowance": 11, "Health Allowance": 12}
             while True:
-                try:
-                    change = str(input("What would you like to change " + changeTarget + " to?(Strings Only):"))
-                    break
-                except:
-                    print("Invalid Input!")
-
-        modifiedList = employeeArray[targetPos]
-        modifiedList[changeOptions[changeTarget]] = change
-        employeeArray[targetPos] = modifiedList
-        # print(employeeArray)
-        File = open("Employees.txt", "w")
-        newFile = str()
-        for line in employeeArray:
-            if len(newFile) == 0:
-                newFile = newFile + line[0] + "," + line[1] + "," + line[2] + "," + line[3] + "," + line[4] + "," + \
-                          line[5] + "," + line[6] + "," + line[7] + "," + line[8] + "," + line[9] + "," + line[
-                              10] + "," + line[11] + "," + line[12]
-            else:
-                newFile = newFile + "\n" + line[0] + "," + line[1] + "," + line[2] + "," + line[3] + "," + line[
-                    4] + "," + line[5] + "," + line[6] + "," + line[7] + "," + line[8] + "," + line[9] + "," + line[
-                              10] + "," + line[11] + "," + line[12]
-        # print(newFile)
-        File.write(newFile)
-        File.close()
-        print("File Modified")
-        waitForUserInput()
-        linebreaks()
-
-    elif MainInput == "D" or MainInput == "d":
-        linebreaks()
-        InputPrompt = True
-        employeeArray = []
-        file = open("Employees.txt", "r")
-        employees = file.readlines()
-        file.close()
-        for line in employees:
-            editedLine = line.replace("\n", "")
-            editedLine = editedLine.split(",")
-            employeeArray.append(editedLine)
-        # print(employeeArray)
-        mergesort(employeeArray)
-        # print(employeeArray)
-
-        while True:
-            try:
-                target = int(input("Enter the Employee ID: "))
-                targetPos = interpolation_search(employeeArray, target)
-                if targetPos != -1:
+                match = False
+                changeTarget = input(
+                    "What value would you like to modify:\nEmployee Registration Number\nName\nAddress\nPhone Nubmer\nJoin Date\nDesignation\nGrade\nLoan\nSalary Per Hour\nTravel Allowance\nHouse Allowance\nHealth Allowance\n")
+                for x in changeOptions:
+                    if changeTarget == x:
+                        match = True
+                if match == True:
                     break
                 else:
-                    print("No user has been found with this Employee ID")
-            except:
-                print("Invalid Input, Employee IDs can only be numbers!")
+                    print("Invalid Input!")
+            if changeOptions[changeTarget] == 0 or changeOptions[changeTarget] == 3 or changeOptions[
+                changeTarget] == 7 or changeOptions[changeTarget] == 8 or changeOptions[changeTarget] == 9 or \
+                    changeOptions[changeTarget] == 10 or changeOptions[changeTarget] == 11 or changeOptions[
+                changeTarget] == 12:
+                while True:
+                    try:
+                        change = int(input("What would you like to change " + changeTarget + " to?(Ints only):"))
+                        change = str(change)
+                        break
+                    except:
+                        print("Invalid Input!")
+            elif changeOptions[changeTarget] == 6:
+                while True:
+                    try:
+                        change = str(input("What would you like to change " + changeTarget + " to?(I, II, III, IV):"))
+                        if change == "I" or change == "II" or change == "III" or change == "IV":
+                            break
+                        else:
+                            print("Invalid Input")
+                    except:
+                        print("Invalid Input!")
+            elif changeOptions[changeTarget] == 4:
+                change = getADate("What would you like to change the Join Date to?")
+            else:
+                while True:
+                    try:
+                        change = str(input("What would you like to change " + changeTarget + " to?(Strings Only):"))
+                        break
+                    except:
+                        print("Invalid Input!")
 
-        confirmation = input("Are you sure you want to delete this employee(Y/N)? ")
-        if confirmation == "Y" or confirmation =="y":
+            modifiedList = employeeArray[targetPos]
+            modifiedList[changeOptions[changeTarget]] = change
+            employeeArray[targetPos] = modifiedList
+            # print(employeeArray)
             File = open("Employees.txt", "w")
-            employeeArray.pop(targetPos)
             newFile = str()
             for line in employeeArray:
                 if len(newFile) == 0:
-                    newFile = newFile + line[0] + "," + line[1] + "," + line[2] + "," + line[3] + "," + line[4] + "," + line[5] + "," + line[6] + "," + line[7] + "," + line[8] + "," + line[9] + "," + line[10] + "," + line[11] + "," + line[12]
+                    newFile = newFile + line[0] + "," + line[1] + "," + line[2] + "," + line[3] + "," + line[4] + "," + \
+                              line[5] + "," + line[6] + "," + line[7] + "," + line[8] + "," + line[9] + "," + line[
+                                  10] + "," + line[11] + "," + line[12]
                 else:
-                    newFile = newFile + "\n" + line[0] + "," + line[1] + "," + line[2] + "," + line[3] + "," + line[4] + "," + line[5] + "," + line[6] + "," + line[7] + "," + line[8] + "," + line[9] + "," + line[10] + "," + line[11] + "," + line[12]
+                    newFile = newFile + "\n" + line[0] + "," + line[1] + "," + line[2] + "," + line[3] + "," + line[
+                        4] + "," + line[5] + "," + line[6] + "," + line[7] + "," + line[8] + "," + line[9] + "," + line[
+                                  10] + "," + line[11] + "," + line[12]
             # print(newFile)
             File.write(newFile)
             File.close()
-            print("File Deleted")
-        elif confirmation == "N" or confirmation == "n":
-            print("Deletion Aborted")
-        else:
-            print("Invalid Input!")
-        waitForUserInput()
-        linebreaks()
+            print("File Modified")
+            waitForUserInput()
+            linebreaks()
 
-    elif MainInput == "P" or MainInput == "p":
-        InputPrompt = True
-        linebreaks()
-        employees = treebuild()
-        target = int(input("Enter the ID of the employee you wish to print the pay slip of: "))
-        slipDate = getADate("What is the date for the payslip(DD/MM/YYYY)")
-        while True:
-            try:
-                overtime = int(input("How many hour of overtime has the employee worked: "))
-                break
-            except:
-                print("Invalid Input")
-        employeeDetails = employees.binarySearch(target)
+        elif MainInput == "D" or MainInput == "d":
+            linebreaks()
+            InputPrompt = True
+            employeeArray = []
+            file = open("Employees.txt", "r")
+            employees = file.readlines()
+            file.close()
+            for line in employees:
+                editedLine = line.replace("\n", "")
+                editedLine = editedLine.split(",")
+                employeeArray.append(editedLine)
+            # print(employeeArray)
+            mergesort(employeeArray)
+            # print(employeeArray)
 
-        try:
-            head = [["Registry", "Name", "Travel Allowance", "House allowance", "Health allowance", "Deductions", "Net Salary"]]
-            tail = []
-            print("Pay slip for " + slipDate)
-            employeeDetails = employeeDetails.replace("[", "")
-            employeeDetails = employeeDetails.replace("]", "")
-            employeeDetails = employeeDetails.replace("'", "")
-            employeeDetails = employeeDetails.split(",")
-            # employeeDetails[10] = employeeDetails[10].replace("\n", "")
-            # print(employeeDetails)
-            tail.append(employeeDetails[0])
-            tail.append(employeeDetails[1])
-            if overtime > 0:
-                salary = (int(employeeDetails[8]) * (int(employeeDetails[9]) + overtime))
+            while True:
+                try:
+                    target = int(input("Enter the Employee ID: "))
+                    targetPos = interpolation_search(employeeArray, target)
+                    if targetPos != -1:
+                        break
+                    else:
+                        print("No user has been found with this Employee ID")
+                except:
+                    print("Invalid Input, Employee IDs can only be numbers!")
+
+            confirmation = input("Are you sure you want to delete this employee(Y/N)? ")
+            if confirmation == "Y" or confirmation == "y":
+                File = open("Employees.txt", "w")
+                employeeArray.pop(targetPos)
+                newFile = str()
+                for line in employeeArray:
+                    if len(newFile) == 0:
+                        newFile = newFile + line[0] + "," + line[1] + "," + line[2] + "," + line[3] + "," + line[
+                            4] + "," + line[5] + "," + line[6] + "," + line[7] + "," + line[8] + "," + line[9] + "," + \
+                                  line[10] + "," + line[11] + "," + line[12]
+                    else:
+                        newFile = newFile + "\n" + line[0] + "," + line[1] + "," + line[2] + "," + line[3] + "," + line[
+                            4] + "," + line[5] + "," + line[6] + "," + line[7] + "," + line[8] + "," + line[9] + "," + \
+                                  line[10] + "," + line[11] + "," + line[12]
+                # print(newFile)
+                File.write(newFile)
+                File.close()
+                print("File Deleted")
+            elif confirmation == "N" or confirmation == "n":
+                print("Deletion Aborted")
             else:
-                salary = (int(employeeDetails[8]) * int(employeeDetails[9]))
-            # tail.append(salary)
-            tail.append((employeeDetails[10])[:-2])
-            tail.append(percentage(salary, int(employeeDetails[11])))
-            tail.append(percentage(salary, int(employeeDetails[12].replace("\\n", ""))))
-            deductions = percentage(salary, 20)
-            tail.append(deductions)
-            netSalary = salary - deductions
-            tail.append(netSalary)
-            head.append(tail)
-            print(tabulate(head, headers="firstrow"))
+                print("Invalid Input!")
             waitForUserInput()
             linebreaks()
-        except:
-            print(employeeDetails)
 
-    elif MainInput == "L" or MainInput == "l":
-        InputPrompt = True
-        linebreaks()
-        listemployee()
-        linebreaks()
-
-    elif MainInput == "R" or MainInput == "r":
-        InputPrompt = True
-        print("Search employee")
-        linebreaks()
-        employees = treebuild()
-        target = int(input("Enter the ID of the employee view: "))
-        employeeDetails = employees.binarySearch(target)
-
-        try:
-            head = [["Registry", "Name", "Address", "Phone Number", "Join Date", "Role", "Grade", "Loan", "Hourly Pay", "Standard hours", "Travel Allowance", "House Allowance %", "Health Allowance %"]]
-            tail = []
-            employeeDetails = employeeDetails.replace("[", "")
-            employeeDetails = employeeDetails.replace("]", "")
-            employeeDetails = employeeDetails.replace("'", "")
-            employeeDetails = employeeDetails.split(",")
-            employeeDetails[12] = (employeeDetails[12])[:-2]
-
-            head.append(employeeDetails)
-            print(tabulate(head, headers="firstrow"))
-            waitForUserInput()
+        elif MainInput == "P" or MainInput == "p":
+            InputPrompt = True
             linebreaks()
-        except:
-            print(employeeDetails)
+            employees = treebuild()
+            target = int(input("Enter the ID of the employee you wish to print the pay slip of: "))
+            slipDate = getADate("What is the date for the payslip(DD/MM/YYYY)")
+            while True:
+                try:
+                    overtime = int(input("How many hour of overtime has the employee worked: "))
+                    break
+                except:
+                    print("Invalid Input")
+            employeeDetails = employees.binarySearch(target)
 
+            try:
+                head = [["Registry", "Name", "Travel Allowance", "House allowance", "Health allowance", "Deductions",
+                         "Net Salary"]]
+                tail = []
+                print("Pay slip for " + slipDate)
+                employeeDetails = employeeDetails.replace("[", "")
+                employeeDetails = employeeDetails.replace("]", "")
+                employeeDetails = employeeDetails.replace("'", "")
+                employeeDetails = employeeDetails.split(",")
+                # employeeDetails[10] = employeeDetails[10].replace("\n", "")
+                # print(employeeDetails)
+                tail.append(employeeDetails[0])
+                tail.append(employeeDetails[1])
+                if overtime > 0:
+                    salary = (int(employeeDetails[8]) * (int(employeeDetails[9]) + overtime))
+                else:
+                    salary = (int(employeeDetails[8]) * int(employeeDetails[9]))
+                # tail.append(salary)
+                tail.append((employeeDetails[10])[:-2])
+                tail.append(percentage(salary, int(employeeDetails[11])))
+                tail.append(percentage(salary, int(employeeDetails[12].replace("\\n", ""))))
+                deductions = percentage(salary, 20)
+                tail.append(deductions)
+                netSalary = salary - deductions
+                tail.append(netSalary)
+                head.append(tail)
+                print(tabulate(head, headers="firstrow"))
+                waitForUserInput()
+                linebreaks()
+            except:
+                print(employeeDetails)
+
+        elif MainInput == "L" or MainInput == "l":
+            InputPrompt = True
+            linebreaks()
+            listemployee()
+            linebreaks()
+
+        elif MainInput == "R" or MainInput == "r":
+            InputPrompt = True
+            print("Search employee")
+            linebreaks()
+            employees = treebuild()
+            target = int(input("Enter the ID of the employee view: "))
+            employeeDetails = employees.binarySearch(target)
+
+            try:
+                head = [
+                    ["Registry", "Name", "Address", "Phone Number", "Join Date", "Role", "Grade", "Loan", "Hourly Pay",
+                     "Standard hours", "Travel Allowance", "House Allowance %", "Health Allowance %"]]
+                tail = []
+                employeeDetails = employeeDetails.replace("[", "")
+                employeeDetails = employeeDetails.replace("]", "")
+                employeeDetails = employeeDetails.replace("'", "")
+                employeeDetails = employeeDetails.split(",")
+                employeeDetails[12] = (employeeDetails[12])[:-2]
+
+                head.append(employeeDetails)
+                print(tabulate(head, headers="firstrow"))
+                waitForUserInput()
+                linebreaks()
+            except:
+                print(employeeDetails)
+
+        else:
+            print("Invalid input please try again")
+
+
+# program start
+print("Welcome to payroll.exe, please log in.")
+while True:
+    username = input("What is your username:")
+    password = input("What is your password:")
+    if username == "Admin" and password == "Admin123":
+        mainMenu()
+        break
     else:
-        print("Invalid input please try again")
+        print("Invalid username or password, Please try again!")
 
