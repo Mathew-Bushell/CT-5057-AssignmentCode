@@ -435,7 +435,13 @@ def mainMenu():
             slipDate = getADate("What is the date for the payslip(DD/MM/YYYY)")
             while True:
                 try:
-                    overtime = int(input("How many hour of overtime has the employee worked: "))
+                    hours= int(input("How many hours has the employee worked this month: "))
+                    break
+                except:
+                    print("Invalid Input")
+            while True:
+                try:
+                    overtime = int(input("How many hours of overtime has the employee worked: "))
                     break
                 except:
                     print("Invalid Input")
@@ -455,9 +461,9 @@ def mainMenu():
                 tail.append(employeeDetails[0])
                 tail.append(employeeDetails[1])
                 if overtime > 0:
-                    salary = (int(employeeDetails[8]) * (int(employeeDetails[9]) + overtime))
+                    salary = (hours * (int(employeeDetails[9]) + overtime))
                 else:
-                    salary = (int(employeeDetails[8]) * int(employeeDetails[9]))
+                    salary = (hours * int(employeeDetails[9]))
                 # tail.append(salary)
                 tail.append((employeeDetails[10])[:-2])
                 tail.append(percentage(salary, int(employeeDetails[11])))
