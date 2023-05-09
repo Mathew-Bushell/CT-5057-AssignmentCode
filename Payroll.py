@@ -2,9 +2,8 @@ from datetime import datetime
 from tabulate import tabulate
 from time import sleep
 
-#used for guidance https://www.tutorialspoint.com/python_data_structure/python_binary_tree.htm
 class Tree:
-    def __init__(self,data):
+    def __init__(self, data):
         self.left = None
         self.right = None
         self.data = data
@@ -19,12 +18,12 @@ class Tree:
         #compares the new value with the parent node and decides where it goes
         #because its designed to accept an split line in the form of a list the data compares have to compare from the UID value aka pos 0
         if self.data:
-            if data[0] < self.data[0]:
+            if int(data[0]) < int(self.data[0]):
                 if self.left is None:
                     self.left = Tree(data)
                 else:
                     self.left.insert(data)
-            elif data[0] > self.data[0]:
+            elif int(data[0]) > int(self.data[0]):
                 if self.right is None:
                     self.right = Tree(data)
                 else:
@@ -46,10 +45,12 @@ class Tree:
 
 #note while maurice had an ID of 6 she was placed "last" in the tree.
 
+# this creates a space between different outputs to reduce clutter when using the program
 def linebreaks():
     for x in range(20):
         print("")
 
+#returns a valid date as of the current date based on the users input
 def getADate(textPrompt):
     maxyear = datetime.now().year
 
@@ -59,7 +60,7 @@ def getADate(textPrompt):
         monthcheck = False
         yearcheck = False
         try:
-
+        #requests a valid year from the user
             while yearcheck == False:
                 year = int(input("Year: "))
                 if year >= 1900 and year <= maxyear:
@@ -67,7 +68,7 @@ def getADate(textPrompt):
                     year = str(year)
                 else:
                     print("Unacceptable Year")
-
+        #requests a valid month from the user
             while monthcheck == False:
                 month = int(input("Month: "))
                 if month >= 1 and month <= 12:
@@ -75,7 +76,7 @@ def getADate(textPrompt):
                     month = str(month)
                 else:
                     print("Unacceptable Month")
-
+        #requests a valid day from the user dependent on what month the user previously entered
             if month == "1" or month == "3" or month == "5" or month == "7" or month == "8" or month == "10" or month == "12":
                 maxday = 31
             elif month == "4" or month == "6" or month == "9" or month == "11":
@@ -98,22 +99,32 @@ def getADate(textPrompt):
             print("This field only accepts integers")
 
     joinyear = (day + "/" + month + "/" + year)
+    #returns the year to be used in other functions
     return(joinyear)
 
+#accepts a series of inputs from the user to create en employee record
 def employeecreate():
     linebreaks()
-
-    File = open("Employees.txt", "r")
-    UIDComp = File.readlines()
-    File.close()
+    newfile = False
+    try:
+        File = open("Employees.txt", "r")
+        UIDComp = File.readlines()
+        File.close()
+    except:
+        File = open("Employees.txt", "w")
+        File.close()
+        File = open("Employees.txt", "r")
+        UIDComp = File.readlines()
+        File.close()
+        newfile = True
     while True:
         match=False
         try:
             UID = int(input("What is the employees registration number:"))
         except:
-            print("Registration number needs to be a number")
+            print("Registration number needs to be a whole number")
             continue
-
+    #only accepts unique registration numbers
         for line in UIDComp:
            SplitLine = line.split(",")
            if UID == int(SplitLine[0]):
@@ -134,6 +145,7 @@ def employeecreate():
 
     joinyear = getADate("When did the employee join(DD/MM/YYYY)")
     designation = input("What is the employees designation: ")
+    #only accepts one of the valid grade options
     while True:
         grade = str(input("What is the employees grade(I, II, III, IV): "))
         if grade == "I" or grade == "II" or grade == "III" or grade == "IV":
@@ -144,23 +156,24 @@ def employeecreate():
     salary = str(input("What is the employees salary(per hour): "))
     hours = str(input("What is the employees standard work hours: "))
     travel = str(input("What is the employees travel allowance: "))
-
     File = open("Employees.txt", "r")
     S1 = File.readlines()
     File.close()
-
-    try:
+    #adds employee record to Employees.txt
+    #if there is no Employees.txt the program will create a new one and add the profile to it
+    if newfile == False:
         File = open("Employees.txt", "a")
         File.write("\n"+str(UID)+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan+","+salary+","+hours+","+travel+",5,8")
 
 
 
-    except:
+    elif newfile == True:
         File = open("Employees.txt", "w")
         line = (str(UID)+","+name+","+address+","+phonenumber+","+joinyear+","+designation+","+grade+","+loan+","+salary+","+hours+","+travel+",5,8")
         File.write(line)
         File.close()
 
+#waits for a user input so they can read whats on screen before the program moves on
 def waitForUserInput():
     input("Press enter to continue...")
 
@@ -213,7 +226,7 @@ def mergesort(array):
         # Copy data to temp arrays L[] and R[]
         #once the array is split it is sorted
         while i < len(L) and j < len(R):
-            if L[i] <= R[j]:
+            if int(L[i][0]) <= int(R[j][0]):
                 array[k] = L[i]
                 i += 1
             else:
@@ -221,7 +234,7 @@ def mergesort(array):
                 j += 1
             k += 1
 
-        # Checking if any element was left
+        # Checks if any elements are left
         while i < len(L):
             array[k] = L[i]
             i += 1
@@ -257,7 +270,6 @@ def interpolation_search(fullArray, target):
             high = pos - 1
 
     return -1  # Target value not found in the array
-
 
 def mainMenu():
     InputPrompt = True
@@ -446,6 +458,7 @@ def mainMenu():
                 except:
                     print("Invalid Input")
             employeeDetails = employees.binarySearch(target)
+            print(employeeDetails)
 
             try:
                 head = [["Registry", "Name", "Travel Allowance", "House allowance", "Health allowance", "Deductions",
@@ -490,7 +503,12 @@ def mainMenu():
             print("Search employee")
             linebreaks()
             employees = treebuild()
-            target = int(input("Enter the ID of the employee view: "))
+            while True:
+                try:
+                    target = int(input("Enter the ID of the employee view: "))
+                    break
+                except:
+                    print("Invalid Input")
             employeeDetails = employees.binarySearch(target)
 
             try:
@@ -516,6 +534,7 @@ def mainMenu():
 
 
 # program start
+#ensures the user has to login to be able to access the rest of the program
 print("Welcome to payroll.exe, please log in.")
 while True:
     username = input("What is your username:")
@@ -525,4 +544,3 @@ while True:
         break
     else:
         print("Invalid username or password, Please try again!")
-
