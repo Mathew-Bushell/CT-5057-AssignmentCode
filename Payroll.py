@@ -43,7 +43,7 @@ class Tree:
         else:
             return str(self.data)
 
-#note while maurice had an ID of 6 she was placed "last" in the tree.
+
 
 # this creates a space between different outputs to reduce clutter when using the program
 def linebreaks():
@@ -458,8 +458,7 @@ def mainMenu():
                 except:
                     print("Invalid Input")
             employeeDetails = employees.binarySearch(target)
-            print(employeeDetails)
-
+            
             try:
                 head = [["Registry", "Name", "Travel Allowance", "House allowance", "Health allowance", "Deductions",
                          "Net Salary"]]
