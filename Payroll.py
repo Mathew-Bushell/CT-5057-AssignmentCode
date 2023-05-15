@@ -458,7 +458,7 @@ def mainMenu():
                 except:
                     print("Invalid Input")
             employeeDetails = employees.binarySearch(target)
-            
+
             try:
                 head = [["Registry", "Name", "Travel Allowance", "House allowance", "Health allowance", "Deductions",
                          "Net Salary"]]
